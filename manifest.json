@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "Crisp Extension",
+    "version": "1.0",
+    "description": "Crisp Function Extension.",
+    "permissions": ["activeTab", "scripting"],
+    "content_scripts": [
+      {
+        "matches": [
+          "https://app.crisp.chat/*"
+        ],
+        "js": ["content.js"],
+        "css": ["style.css"]
+      }
+    ],
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "icon.svg",
+        "48": "icon.svg",
+        "128": "icon.svg"
+      }
+    }
+  }
+  

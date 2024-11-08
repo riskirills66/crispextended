@@ -1,0 +1,40 @@
+#floatingButton {
+  appearance: none; /* Ensures consistent styling across browsers */
+  background-color: #FAFBFC; /* New background color */
+  border: 1px solid rgba(27, 31, 35, 0.15); /* Border styling */
+  border-radius: 6px; /* Adjusted border radius */
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset; /* Box shadow */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+  color: #24292E; /* New text color */
+  cursor: pointer; /* Pointer cursor on hover */
+  display: inline-block; /* Ensure it behaves like a button */
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"; /* Font styling */
+  font-size: 14px; /* Font size */
+  font-weight: 500; /* Font weight */
+  line-height: 20px; /* Line height */
+  padding: 6px 16px; /* Padding */
+  position: fixed; /* Fixed positioning */
+  right: 5px; /* Positioning from the right */
+  top: 50px; /* Distance from the top */
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1); /* Transition for background color */
+  user-select: none; /* Prevent text selection */
+  vertical-align: middle; /* Aligns the button properly */
+  white-space: nowrap; /* Prevents text from wrapping */
+  word-wrap: break-word; /* Allows word breaking if needed */
+}
+
+#floatingButton:hover {
+  background-color: #F3F4F6; /* New hover background color */
+  text-decoration: none; /* No text decoration on hover */
+  transition-duration: 0.1s; /* Transition duration on hover */
+}
+
+#floatingButton:active {
+  background-color: #EDEFF2; /* Background color when active */
+  box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset; /* Active box shadow */
+  transition: none 0s; /* No transition when active */
+}
+
+#floatingButton:focus {
+  outline: 1px transparent; /* Focus outline */
+}
