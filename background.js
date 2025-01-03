@@ -11,7 +11,7 @@ chrome.contextMenus.create({
       // Make sure we have a valid 'dest' value
       if (dest) {
         // Fetch transaction data from the server
-        fetch(`http://localhost:3000/trx?dest=${dest}`)
+        fetch(`http://localhost:8040/trx?dest=${dest}`)
           .then(response => response.json())
           .then(data => {
             // Send the fetched data to the content script
