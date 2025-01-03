@@ -37,7 +37,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                 table.style.borderCollapse = 'collapse';
 
                 // Define table headers and map the columns explicitly
-                const headers = ['Tanggal', 'Kode Produk', 'Tujuan', 'SN', 'Kode Reseller', 'Harga', 'Status', 'Modul Label', 'Actions'];
+                const headers = ['Tanggal', 'Produk', 'Tujuan', 'SN', 'Reseller', 'Harga', 'Status', 'Modul Label', 'Actions'];
                 const headerRow = document.createElement('tr');
 
                 headers.forEach(headerText => {
