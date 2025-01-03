@@ -167,7 +167,7 @@ function displayModal(data) {
   table.style.borderCollapse = 'collapse';
 
   // Define table headers and map the columns explicitly
-  const headers = ['Tanggal', 'Produk', 'Tujuan', 'SN', 'Reseller', 'Harga', 'Status', 'Modul Label', 'Actions'];
+  const headers = ['Tanggal', 'Produk', 'Tujuan', 'SN', 'Reseller', 'Status', 'Harga', 'Modul Label', 'Actions'];
   const headerRow = document.createElement('tr');
 
   headers.forEach(headerText => {
@@ -188,9 +188,9 @@ function displayModal(data) {
       row.kode_produk || '',       // Kode Produk
       row.tujuan || '',            // Tujuan
       row.sn || '',                // SN
+      row.status || '',            // Status
       row.kode_reseller || '',     // Kode Reseller
       row.harga || '',             // Harga
-      row.status || '',            // Status
       row.kode_modul_label || ''   // Modul Label
     ];
 
