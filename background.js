@@ -37,7 +37,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                 table.style.borderCollapse = 'collapse';
 
                 // Define table headers and map the columns explicitly
-                const headers = ['Tanggal', 'Kode Produk', 'Tujuan', 'SN', 'Kode Reseller', 'Harga', 'Status', 'Modul Label'];
+                const headers = ['Tanggal', 'Kode Produk', 'Tujuan', 'SN', 'Kode Reseller', 'Harga', 'Status', 'Modul Label', 'Actions'];
                 const headerRow = document.createElement('tr');
 
                 headers.forEach(headerText => {
@@ -53,7 +53,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                 data.forEach(row => {
                   const tr = document.createElement('tr');
 
-                  // Correct mapping of the data
                   const rowData = [
                     row.tgl_entri || '',         // Tanggal
                     row.kode_produk || '',       // Kode Produk
@@ -64,7 +63,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     row.status || '',            // Status
                     row.kode_modul_label || ''   // Modul Label
                   ];
-                  
+
                   rowData.forEach(cellData => {
                     const td = document.createElement('td');
                     td.innerText = cellData;
@@ -73,9 +72,28 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     tr.appendChild(td);
                   });
 
+                  // Add "Report" button to the row
+                  const reportButton = document.createElement('button');
+                  reportButton.innerText = 'Report';
+                  reportButton.style.margin = '4px';
+                  reportButton.onclick = () => {
+                    const message = `${encodeURIComponent(row.tgl_entri || '')} %20${encodeURIComponent(row.tujuan || '')} %20${encodeURIComponent(row.sn || '')} %20${encodeURIComponent(row.status || '')} %20${encodeURIComponent(row.kode_reseller || '')} %20${encodeURIComponent(row.kode_modul_label || '')}`;
+
+                    fetch(`http://localhost:4040/send?message=${message}`)
+                      .then(response => response.json())
+                      .catch(error => {
+                        console.error('Error sending report:', error)
+                      });
+                  };
+
+                  const buttonCell = document.createElement('td');
+                  buttonCell.style.border = '1px solid #ccc';
+                  buttonCell.style.padding = '8px';
+                  buttonCell.appendChild(reportButton);
+                  tr.appendChild(buttonCell);
+
                   table.appendChild(tr);
                 });
-
 
                 modal.appendChild(table);
 

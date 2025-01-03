@@ -9,7 +9,8 @@
     "contextMenus"
   ],
   "host_permissions": [
-    "http://localhost:8040/*"
+    "http://localhost:8040/*",
+    "http://localhost:4040/*"
   ],
   "content_scripts": [
     {

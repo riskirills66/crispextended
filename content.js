@@ -143,10 +143,6 @@ observer.observe(document.body, {
 
 // ..................
 
-
-// content.js
-
-// You can add logic to handle messages or interactions with the page if needed
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'showModal' && request.data) {
     displayModal(request.data);
@@ -171,7 +167,7 @@ function displayModal(data) {
   table.style.borderCollapse = 'collapse';
 
   // Define table headers and map the columns explicitly
-  const headers = ['Tanggal', 'Kode Produk', 'Tujuan', 'SN', 'Kode Reseller', 'Harga', 'Status', 'Modul Label'];
+  const headers = ['Tanggal', 'Kode Produk', 'Tujuan', 'SN', 'Kode Reseller', 'Harga', 'Status', 'Modul Label', 'Actions'];
   const headerRow = document.createElement('tr');
 
   headers.forEach(headerText => {
@@ -187,7 +183,6 @@ function displayModal(data) {
   data.forEach(row => {
     const tr = document.createElement('tr');
 
-    // Correct mapping of the data
     const rowData = [
       row.tgl_entri || '',         // Tanggal
       row.kode_produk || '',       // Kode Produk
@@ -198,7 +193,7 @@ function displayModal(data) {
       row.status || '',            // Status
       row.kode_modul_label || ''   // Modul Label
     ];
-    
+
     rowData.forEach(cellData => {
       const td = document.createElement('td');
       td.innerText = cellData;
@@ -207,8 +202,29 @@ function displayModal(data) {
       tr.appendChild(td);
     });
 
+    // Add "Report" button to the row
+    const reportButton = document.createElement('button');
+    reportButton.innerText = 'Report';
+    reportButton.style.margin = '4px';
+    reportButton.onclick = () => {
+      const message = `${encodeURIComponent(row.tgl_entri || '')} %20${encodeURIComponent(row.tujuan || '')} %20${encodeURIComponent(row.sn || '')} %20${encodeURIComponent(row.status || '')} %20${encodeURIComponent(row.kode_reseller || '')} %20${encodeURIComponent(row.kode_modul_label || '')}`;
+
+      fetch(`http://localhost:4040/send?message=${message}`)
+        .then(response => response.json())
+        .catch(error => {
+          console.error('Error sending report:', error)
+        });
+    };
+
+    const buttonCell = document.createElement('td');
+    buttonCell.style.border = '1px solid #ccc';
+    buttonCell.style.padding = '8px';
+    buttonCell.appendChild(reportButton);
+    tr.appendChild(buttonCell);
+
     table.appendChild(tr);
   });
+
 
   modal.appendChild(table);
 
