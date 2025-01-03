@@ -142,3 +142,81 @@ observer.observe(document.body, {
 
 
 // ..................
+
+
+// content.js
+
+// You can add logic to handle messages or interactions with the page if needed
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'showModal' && request.data) {
+    displayModal(request.data);
+  }
+});
+
+function displayModal(data) {
+  const modal = document.createElement('div');
+  modal.id = 'transactionModal';
+  modal.style.position = 'fixed';
+  modal.style.top = '50%';
+  modal.style.left = '50%';
+  modal.style.transform = 'translate(-50%, -50%)';
+  modal.style.backgroundColor = 'white';
+  modal.style.padding = '20px';
+  modal.style.zIndex = '9999';
+  modal.style.borderRadius = '8px';
+  modal.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+  
+  const table = document.createElement('table');
+  table.style.width = '100%';
+  table.style.borderCollapse = 'collapse';
+  
+  // Define table headers and map the columns explicitly
+  const headers = ['Tanggal', 'Kode Produk', 'Tujuan', 'Kode Reseller', 'Harga', 'Status', 'Modul Label'];
+  const headerRow = document.createElement('tr');
+
+  headers.forEach(headerText => {
+    const th = document.createElement('th');
+    th.innerText = headerText;
+    th.style.border = '1px solid #ccc';
+    th.style.padding = '8px';
+    headerRow.appendChild(th);
+  });
+  table.appendChild(headerRow);
+  
+  // Loop through the data and make sure the values align with the headers
+  data.forEach(row => {
+    const tr = document.createElement('tr');
+
+    // Correct mapping of the data
+    const rowData = [
+      row.tgl_entri || '',         // Tanggal (mapped to tgl_entri)
+      row.kode_produk || '',       // Kode Produk (mapped to kode_produk)
+      row.tujuan || '',            // Tujuan (mapped to tujuan)
+      row.kode_reseller || '',     // Kode Reseller (mapped to kode_reseller)
+      row.harga || '',             // Harga (mapped to harga)
+      row.status || '',            // Status (mapped to status)
+      row.kode_modul_label || ''   // Modul Label (mapped to kode_modul_label)
+    ];
+
+    rowData.forEach(cellData => {
+      const td = document.createElement('td');
+      td.innerText = cellData;
+      td.style.border = '1px solid #ccc';
+      td.style.padding = '8px';
+      tr.appendChild(td);
+    });
+
+    table.appendChild(tr);
+  });
+  
+  modal.appendChild(table);
+  
+  // Create a close button
+  const closeButton = document.createElement('button');
+  closeButton.innerText = 'Close';
+  closeButton.style.marginTop = '10px';
+  closeButton.onclick = () => modal.remove();
+  modal.appendChild(closeButton);
+  
+  document.body.appendChild(modal);
+}

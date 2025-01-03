@@ -1,25 +1,34 @@
 {
-    "manifest_version": 3,
-    "name": "Crisp Extension",
-    "version": "1.0",
-    "description": "Crisp Function Extension.",
-    "permissions": ["activeTab", "scripting"],
-    "content_scripts": [
-      {
-        "matches": [
-          "https://app.crisp.chat/*"
-        ],
-        "js": ["content.js"],
-        "css": ["style.css"]
-      }
-    ],
-    "action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-        "16": "icon.svg",
-        "48": "icon.svg",
-        "128": "icon.svg"
-      }
+  "manifest_version": 3,
+  "name": "Crisp Extension",
+  "version": "1.0",
+  "description": "Crisp Function Extension.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "contextMenus"
+  ],
+  "host_permissions": [
+    "http://localhost:3000/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://app.crisp.chat/*"
+      ],
+      "js": ["content.js"],
+      "css": ["style.css"]
     }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.svg",
+      "48": "icon.svg",
+      "128": "icon.svg"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
   }
-  
+}
