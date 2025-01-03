@@ -14,31 +14,31 @@ document.addEventListener("keydown", (event) => {
 // Dynamic Bubble Color
 function changeBackgroundColor() {
   const profileElement = document.querySelector("#crisp-app > div.c-app__container > div.c-app__content > div.c-app__stack > div > div > div > div.c-inbox-conversation.o-layout.o-layout--flex > div.c-inbox-conversation__pane > div > div.c-conversation-profile.c-inbox-conversation__profile > div > div.c-conversation-profile__body > div > div:nth-child(8) > div > div.c-conversation-profile-widget__body > div > div:nth-child(1) > div:nth-child(2) > div.c-conversation-profile-widget-data-item__cell.c-conversation-profile-widget-data-item__cell--value");
-  
+
   // Store previously applied background color to reset when condition no longer matches
   let lastAppliedColor = '';
-  
+
   if (profileElement) {
     let backgroundColor = ''; // Default to no background color
     const textContent = profileElement.textContent.trim();
-    
+
     // Determine the background color based on text content
     if (textContent.includes("Zona Loket")) {
-      backgroundColor = '#a90000'; 
+      backgroundColor = '#a90000';
     } else if (textContent.includes("Talenta Mobile")) {
-      backgroundColor = '#FF00FF'; 
+      backgroundColor = '#FF00FF';
     } else if (textContent.includes("AFF Mobile")) {
-      backgroundColor = '#ca5c00'; 
+      backgroundColor = '#ca5c00';
     } else if (textContent.includes("Rumah Pulsa Apps")) {
-      backgroundColor = '#661200'; 
+      backgroundColor = '#661200';
     } else if (textContent.includes("Loket Kuota")) {
-      backgroundColor = '#618874'; 
+      backgroundColor = '#618874';
     } else if (textContent.includes("Infra Mobile")) {
-      backgroundColor = '#0c4aff'; 
+      backgroundColor = '#0c4aff';
     } else if (textContent.includes("Smart Loket")) {
-      backgroundColor = '#03807f'; 
+      backgroundColor = '#03807f';
     }
-    
+
     // Function to reset styles to default
     const resetStyles = () => {
       const elementsToReset = [
@@ -57,20 +57,20 @@ function changeBackgroundColor() {
         ...document.querySelectorAll('.c-field-token .c-field-token__field'),
         ...document.querySelectorAll('.c-base-toast--info .c-base-toast__view')
       ];
-      
+
       elementsToReset.forEach(element => {
         element.style.backgroundColor = ''; // Reset background color
         element.style.color = ''; // Reset color
         element.style.stroke = ''; // Reset stroke color
       });
     };
-    
+
     // If a new background color should be applied, set it; otherwise, reset
     if (backgroundColor) {
       if (backgroundColor !== lastAppliedColor) {
         resetStyles(); // Reset previous styles before applying new ones
         lastAppliedColor = backgroundColor; // Update the last applied color
-        
+
         // Apply new background color to specific elements
         document.querySelectorAll('.c-conversation-box-content-message-bubble--operator .c-conversation-box-content-message-bubble__wrapper').forEach(element => {
           element.style.backgroundColor = backgroundColor;
@@ -165,13 +165,13 @@ function displayModal(data) {
   modal.style.zIndex = '9999';
   modal.style.borderRadius = '8px';
   modal.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
-  
+
   const table = document.createElement('table');
   table.style.width = '100%';
   table.style.borderCollapse = 'collapse';
-  
+
   // Define table headers and map the columns explicitly
-  const headers = ['Tanggal', 'Kode Produk', 'Tujuan', 'Kode Reseller', 'Harga', 'Status', 'Modul Label'];
+  const headers = ['Tanggal', 'Kode Produk', 'Tujuan', 'SN', 'Kode Reseller', 'Harga', 'Status', 'Modul Label'];
   const headerRow = document.createElement('tr');
 
   headers.forEach(headerText => {
@@ -182,22 +182,23 @@ function displayModal(data) {
     headerRow.appendChild(th);
   });
   table.appendChild(headerRow);
-  
+
   // Loop through the data and make sure the values align with the headers
   data.forEach(row => {
     const tr = document.createElement('tr');
 
     // Correct mapping of the data
     const rowData = [
-      row.tgl_entri || '',         // Tanggal (mapped to tgl_entri)
-      row.kode_produk || '',       // Kode Produk (mapped to kode_produk)
-      row.tujuan || '',            // Tujuan (mapped to tujuan)
-      row.kode_reseller || '',     // Kode Reseller (mapped to kode_reseller)
-      row.harga || '',             // Harga (mapped to harga)
-      row.status || '',            // Status (mapped to status)
-      row.kode_modul_label || ''   // Modul Label (mapped to kode_modul_label)
+      row.tgl_entri || '',         // Tanggal
+      row.kode_produk || '',       // Kode Produk
+      row.tujuan || '',            // Tujuan
+      row.sn || '',                // SN
+      row.kode_reseller || '',     // Kode Reseller
+      row.harga || '',             // Harga
+      row.status || '',            // Status
+      row.kode_modul_label || ''   // Modul Label
     ];
-
+    
     rowData.forEach(cellData => {
       const td = document.createElement('td');
       td.innerText = cellData;
@@ -208,15 +209,15 @@ function displayModal(data) {
 
     table.appendChild(tr);
   });
-  
+
   modal.appendChild(table);
-  
+
   // Create a close button
   const closeButton = document.createElement('button');
   closeButton.innerText = 'Close';
   closeButton.style.marginTop = '10px';
   closeButton.onclick = () => modal.remove();
   modal.appendChild(closeButton);
-  
+
   document.body.appendChild(modal);
 }
