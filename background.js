@@ -69,6 +69,10 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     td.innerText = cellData;
                     td.style.border = '1px solid #ccc';
                     td.style.padding = '8px';
+                    td.style.whiteSpace = 'nowrap';  // Prevent wrapping
+                    td.style.overflow = 'hidden';    // Optionally hide overflowing content
+                    td.style.textOverflow = 'ellipsis';  // Optionally add ellipsis for overflow
+                    td.style.maxWidth = '300px';     // Set maximum width
                     tr.appendChild(td);
                   });
 
