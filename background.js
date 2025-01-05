@@ -1,24 +1,19 @@
 chrome.contextMenus.create({
   id: "cektrx",
   title: "Cek Transaksi",
-  contexts: ["selection"],  // You can adjust based on what you want to trigger the menu with
+  contexts: ["selection"],
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === "cektrx") {
-    const dest = info.selectionText;  // This is the selected text, assumed to be the 'dest' (e.g., phone number)
-
-    // Make sure we have a valid 'dest' value
+    const dest = info.selectionText;
     if (dest) {
-      // Fetch transaction data from the server
       fetch(`http://localhost:8040/trx?dest=${dest}`)
         .then(response => response.json())
         .then(data => {
-          // Send the fetched data to the content script
           chrome.scripting.executeScript({
             target: { tabId: tab.id },
             func: (data) => {
-              // The displayModal function is defined here in the injected context
               function displayModal(data) {
                 const modal = document.createElement('div');
                 modal.id = 'transactionModal';
@@ -36,8 +31,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                 table.style.width = '100%';
                 table.style.borderCollapse = 'collapse';
 
-                // Define table headers and map the columns explicitly
-                const headers = ['Tanggal', 'Produk', 'Tujuan', 'SN', 'Reseller', 'Status', 'Harga', 'Modul', '', ''];
+                const headers = ['Tanggal', 'Produk', 'Tujuan', 'SN', 'Status', 'Reseller', 'Harga', 'Modul', '', ''];
                 const headerRow = document.createElement('tr');
 
                 headers.forEach(headerText => {
@@ -49,19 +43,18 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                 });
                 table.appendChild(headerRow);
 
-                // Loop through the data and make sure the values align with the headers
                 data.forEach(row => {
                   const tr = document.createElement('tr');
 
                   const rowData = [
-                    row.tgl_entri || '',         // Tanggal
-                    row.kode_produk || '',       // Kode Produk
-                    row.tujuan || '',            // Tujuan
-                    row.sn || '',                // SN
-                    row.kode_reseller || '',     // Reseller
-                    row.status || '',            // Status
-                    row.harga || '',             // Harga
-                    row.kode_modul_label || ''   // Modul Label
+                    row.tgl_entri || '',
+                    row.kode_produk || '',
+                    row.tujuan || '',
+                    row.sn || '',
+                    row.status || '',
+                    row.kode_reseller || '',
+                    row.harga || '',
+                    row.kode_modul_label || ''
                   ];
 
                   rowData.forEach(cellData => {
@@ -69,21 +62,20 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     td.innerText = cellData;
                     td.style.border = '1px solid #ccc';
                     td.style.padding = '8px';
-                    td.style.whiteSpace = 'nowrap';  // Prevent wrapping
-                    td.style.overflow = 'hidden';    // Optionally hide overflowing content
-                    td.style.textOverflow = 'ellipsis';  // Optionally add ellipsis for overflow
-                    td.style.maxWidth = '300px';     // Set maximum width
+                    td.style.whiteSpace = 'nowrap';
+                    td.style.overflow = 'hidden';
+                    td.style.textOverflow = 'ellipsis';
+                    td.style.maxWidth = '300px';
                     tr.appendChild(td);
                   });
 
-                  // Add "Report" button in its own column
                   const reportButton = document.createElement('button');
                   reportButton.innerText = '🚩';
                   reportButton.style.margin = '4px';
-                  reportButton.style.background = 'transparent';  // Remove the background
-                  reportButton.style.border = 'none';  // Remove the border
-                  reportButton.style.padding = '0';  // Remove extra padding
-                  reportButton.style.fontSize = '20px';  // Adjust the emoji size as needed
+                  reportButton.style.background = 'transparent';
+                  reportButton.style.border = 'none';
+                  reportButton.style.padding = '0';
+                  reportButton.style.fontSize = '20px';
                   reportButton.onclick = () => {
                     const message = `${encodeURIComponent(row.tgl_entri || '')} %20${encodeURIComponent(row.tujuan || '')} %20${encodeURIComponent(row.sn || '')} %20${encodeURIComponent(row.status || '')} %20${encodeURIComponent(row.kode_reseller || '')} %20${encodeURIComponent(row.kode_modul_label || '')}`;
 
@@ -100,14 +92,13 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                   reportCell.appendChild(reportButton);
                   tr.appendChild(reportCell);
 
-                  // Add "Copy" button in its own column
                   const copyButton = document.createElement('button');
                   copyButton.innerText = '📋';
                   copyButton.style.margin = '4px';
-                  copyButton.style.background = 'transparent';  // Remove the background
-                  copyButton.style.border = 'none';  // Remove the border
-                  copyButton.style.padding = '0';  // Remove extra padding
-                  copyButton.style.fontSize = '20px';  // Adjust the emoji size as needed
+                  copyButton.style.background = 'transparent';
+                  copyButton.style.border = 'none';
+                  copyButton.style.padding = '0';
+                  copyButton.style.fontSize = '20px';
                   copyButton.onclick = () => {
                     const formattedText = `Tanggal: ${row.tgl_entri || ''}.\nKode: ${row.kode_produk || ''}.\nTujuan: ${row.tujuan || ''}.\nRef: ${row.sn || ''}.\nHarga: ${row.harga || ''}.\nStatus: ${row.status || ''}`;
                     navigator.clipboard.writeText(formattedText)
@@ -125,16 +116,20 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
                 modal.appendChild(table);
 
-                // Create a close button
                 const closeButton = document.createElement('button');
                 closeButton.innerText = 'Close';
                 closeButton.style.marginTop = '10px';
                 closeButton.onclick = () => modal.remove();
                 modal.appendChild(closeButton);
 
-                // Listen for the "ESC" key to close the modal
                 document.addEventListener('keydown', (event) => {
                   if (event.key === 'Escape') {
+                    modal.remove();
+                  }
+                });
+
+                document.addEventListener('click', (event) => {
+                  if (!modal.contains(event.target) && event.target !== closeButton) {
                     modal.remove();
                   }
                 });
@@ -142,10 +137,9 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                 document.body.appendChild(modal);
               }
 
-              // Call displayModal with the fetched data
               displayModal(data);
             },
-            args: [data],  // Pass the transaction data to the function
+            args: [data],
           });
         })
         .catch(error => {
