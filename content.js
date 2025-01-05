@@ -1,6 +1,6 @@
-//Ctrl+Alt+F Shortcut to Ask for Ratings
+//Ctrl+Alt+E Shortcut to Ask for Ratings
 document.addEventListener("keydown", (event) => {
-  if (event.ctrlKey && event.altKey && event.key === "f") {
+  if (event.ctrlKey && event.altKey && event.key === "e") {
     const targetSelector = ".c-conversation-profile-widget-layout-action--button.c-conversation-profile-widget-layout-action--green";
     const targetElement = document.querySelector(targetSelector);
 
