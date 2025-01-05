@@ -37,7 +37,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                 table.style.borderCollapse = 'collapse';
 
                 // Define table headers and map the columns explicitly
-                const headers = ['Tanggal', 'Produk', 'Tujuan', 'SN', 'Reseller', 'Status', 'Harga', 'Modul Label', 'Actions'];
+                const headers = ['Tanggal', 'Produk', 'Tujuan', 'SN', 'Reseller', 'Status', 'Harga', 'Modul', '', ''];
                 const headerRow = document.createElement('tr');
 
                 headers.forEach(headerText => {
@@ -58,8 +58,8 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     row.kode_produk || '',       // Kode Produk
                     row.tujuan || '',            // Tujuan
                     row.sn || '',                // SN
+                    row.kode_reseller || '',     // Reseller
                     row.status || '',            // Status
-                    row.kode_reseller || '',     // Kode Reseller
                     row.harga || '',             // Harga
                     row.kode_modul_label || ''   // Modul Label
                   ];
@@ -76,10 +76,14 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     tr.appendChild(td);
                   });
 
-                  // Add "Report" button to the row
+                  // Add "Report" button in its own column
                   const reportButton = document.createElement('button');
-                  reportButton.innerText = 'Report';
+                  reportButton.innerText = '🚩';
                   reportButton.style.margin = '4px';
+                  reportButton.style.background = 'transparent';  // Remove the background
+                  reportButton.style.border = 'none';  // Remove the border
+                  reportButton.style.padding = '0';  // Remove extra padding
+                  reportButton.style.fontSize = '20px';  // Adjust the emoji size as needed
                   reportButton.onclick = () => {
                     const message = `${encodeURIComponent(row.tgl_entri || '')} %20${encodeURIComponent(row.tujuan || '')} %20${encodeURIComponent(row.sn || '')} %20${encodeURIComponent(row.status || '')} %20${encodeURIComponent(row.kode_reseller || '')} %20${encodeURIComponent(row.kode_modul_label || '')}`;
 
@@ -90,11 +94,31 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                       });
                   };
 
-                  const buttonCell = document.createElement('td');
-                  buttonCell.style.border = '1px solid #ccc';
-                  buttonCell.style.padding = '8px';
-                  buttonCell.appendChild(reportButton);
-                  tr.appendChild(buttonCell);
+                  const reportCell = document.createElement('td');
+                  reportCell.style.border = '1px solid #ccc';
+                  reportCell.style.padding = '8px';
+                  reportCell.appendChild(reportButton);
+                  tr.appendChild(reportCell);
+
+                  // Add "Copy" button in its own column
+                  const copyButton = document.createElement('button');
+                  copyButton.innerText = '📋';
+                  copyButton.style.margin = '4px';
+                  copyButton.style.background = 'transparent';  // Remove the background
+                  copyButton.style.border = 'none';  // Remove the border
+                  copyButton.style.padding = '0';  // Remove extra padding
+                  copyButton.style.fontSize = '20px';  // Adjust the emoji size as needed
+                  copyButton.onclick = () => {
+                    const formattedText = `Tanggal: ${row.tgl_entri || ''}.\nKode: ${row.kode_produk || ''}.\nTujuan: ${row.tujuan || ''}.\nRef: ${row.sn || ''}.\nHarga: ${row.harga || ''}.\nStatus: ${row.status || ''}`;
+                    navigator.clipboard.writeText(formattedText)
+                      .catch(error => console.error('Error copying text:', error));
+                  };
+
+                  const copyCell = document.createElement('td');
+                  copyCell.style.border = '1px solid #ccc';
+                  copyCell.style.padding = '8px';
+                  copyCell.appendChild(copyButton);
+                  tr.appendChild(copyCell);
 
                   table.appendChild(tr);
                 });
@@ -107,6 +131,13 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                 closeButton.style.marginTop = '10px';
                 closeButton.onclick = () => modal.remove();
                 modal.appendChild(closeButton);
+
+                // Listen for the "ESC" key to close the modal
+                document.addEventListener('keydown', (event) => {
+                  if (event.key === 'Escape') {
+                    modal.remove();
+                  }
+                });
 
                 document.body.appendChild(modal);
               }
