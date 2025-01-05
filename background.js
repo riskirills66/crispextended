@@ -88,6 +88,27 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     tr.appendChild(td);
                   });
 
+                  const reportButton = document.createElement('button');
+                  reportButton.innerText = '🚩';
+                  reportButton.style.margin = '4px';
+                  reportButton.style.background = 'transparent';
+                  reportButton.style.border = 'none';
+                  reportButton.style.padding = '0';
+                  reportButton.style.fontSize = '20px';
+                  reportButton.onclick = () => {
+                    const message = `${encodeURIComponent(row.tgl_entri || '')} %20${encodeURIComponent(row.tujuan || '')} %20${encodeURIComponent(row.sn || '')} %20${encodeURIComponent(row.status || '')} %20${encodeURIComponent(row.kode_reseller || '')} %20${encodeURIComponent(row.kode_modul_label || '')}`;
+                    fetch(`http://localhost:4040/send?message=${message}`)
+                      .then(response => response.json())
+                      .catch(error => {
+                        console.error('Error sending report:', error)
+                      });
+                  };
+                  const reportCell = document.createElement('td');
+                  reportCell.style.border = '1px solid #ccc';
+                  reportCell.style.padding = '8px';
+                  reportCell.appendChild(reportButton);
+                  tr.appendChild(reportCell);
+
                   const copyButton = document.createElement('button');
                   copyButton.innerText = '📋';
                   copyButton.style.margin = '4px';
