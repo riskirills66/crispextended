@@ -119,6 +119,12 @@ Status: ${row.status || ''}`;
                   }
                 });
 
+                document.addEventListener('click', (event) => {
+                  if (!modal.contains(event.target) && event.target !== closeButton) {
+                    modal.remove();
+                  }
+                });
+
                 document.body.appendChild(modal);
               }
 
@@ -230,6 +236,12 @@ Update: ${row.tgl_status || ''}`;
 
                 document.addEventListener('keydown', (event) => {
                   if (event.key === 'Escape') {
+                    modal.remove();
+                  }
+                });
+
+                document.addEventListener('click', (event) => {
+                  if (!modal.contains(event.target) && event.target !== closeButton) {
                     modal.remove();
                   }
                 });
