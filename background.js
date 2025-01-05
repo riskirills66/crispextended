@@ -20,6 +20,16 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
           chrome.scripting.executeScript({
             target: { tabId: tab.id },
             func: (data) => {
+              // Helper function to format date
+              function formatDate(dateString) {
+                const regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\.\d{3}Z/;
+                const match = dateString.match(regex);
+                if (match) {
+                  return `${match[3]}-${match[2]}-${match[1]} ${match[4]}:${match[5]}:${match[6]}`;
+                }
+                return dateString; // In case the format doesn't match
+              }
+
               function displayModal(data) {
                 const modal = document.createElement('div');
                 modal.id = 'transactionModal';
@@ -56,7 +66,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                   const tr = document.createElement('tr');
 
                   const rowData = [
-                    row.tgl_entri || '',
+                    formatDate(row.tgl_entri) || '',
                     row.kode_produk || '',
                     row.tujuan || '',
                     row.sn || '',
@@ -86,7 +96,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                   copyButton.style.padding = '0';
                   copyButton.style.fontSize = '20px';
                   copyButton.onclick = () => {
-                    const formattedText = `Tanggal: ${row.tgl_entri || ''}.
+                    const formattedText = `Tanggal: ${formatDate(row.tgl_entri) || ''}.
 Kode: ${row.kode_produk || ''}.
 Tujuan: ${row.tujuan || ''}.
 Ref: ${row.sn || ''}.
@@ -146,6 +156,16 @@ Status: ${row.status || ''}`;
           chrome.scripting.executeScript({
             target: { tabId: tab.id },
             func: (data) => {
+              // Helper function to format date
+              function formatDate(dateString) {
+                const regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\.\d{3}Z/;
+                const match = dateString.match(regex);
+                if (match) {
+                  return `${match[3]}-${match[2]}-${match[1]} ${match[4]}:${match[5]}:${match[6]}`;
+                }
+                return dateString; // In case the format doesn't match
+              }
+
               function displayModal(data) {
                 const modal = document.createElement('div');
                 modal.id = 'depositModal';
@@ -182,11 +202,11 @@ Status: ${row.status || ''}`;
                   const tr = document.createElement('tr');
 
                   const rowData = [
-                    row.waktu || '',
+                    formatDate(row.waktu) || '',
                     row.kode_reseller || '',
                     row.jumlah || '',
                     row.status || '',
-                    row.tgl_status || ''
+                    formatDate(row.tgl_status) || ''
                   ];
 
                   rowData.forEach(cellData => {
@@ -208,11 +228,11 @@ Status: ${row.status || ''}`;
                   copyButton.style.padding = '0';
                   copyButton.style.fontSize = '20px';
                   copyButton.onclick = () => {
-                    const formattedText = `Tanggal: ${row.waktu || ''}.
+                    const formattedText = `Tanggal: ${formatDate(row.waktu) || ''}.
 Reseller: ${row.kode_reseller || ''}.
 Jumlah: ${row.jumlah || ''}.
 Status: ${row.status || ''}.
-Update: ${row.tgl_status || ''}`;
+Update: ${formatDate(row.tgl_status) || ''}`;
                     navigator.clipboard.writeText(formattedText)
                       .catch(error => console.error('Error copying text:', error));
                   };
