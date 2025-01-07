@@ -46,6 +46,8 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                 const table = document.createElement('table');
                 table.style.width = '100%';
                 table.style.borderCollapse = 'collapse';
+                table.style.color = 'black';
+                table.style.backgroundColor = 'white';
 
                 const headers = ['Tanggal', 'Produk', 'Tujuan', 'SN', 'Status', 'Reseller', 'Harga', 'Modul', '', ''];
                 const headerRow = document.createElement('tr');
@@ -58,12 +60,14 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                   th.style.whiteSpace = 'nowrap';
                   th.style.overflow = 'hidden';
                   th.style.textOverflow = 'ellipsis';
+                  th.style.color = 'black';
                   headerRow.appendChild(th);
                 });
                 table.appendChild(headerRow);
 
                 data.forEach(row => {
                   const tr = document.createElement('tr');
+                  tr.style.color = 'white';
 
                   const rowData = [
                     formatDate(row.tgl_entri) || '',
@@ -85,6 +89,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     td.style.overflow = 'hidden';
                     td.style.textOverflow = 'ellipsis';
                     td.style.maxWidth = '300px';
+                    td.style.color = 'black';
                     tr.appendChild(td);
                   });
 
@@ -203,6 +208,8 @@ Status: ${row.status || ''}`;
                 const table = document.createElement('table');
                 table.style.width = '100%';
                 table.style.borderCollapse = 'collapse';
+                table.style.color = 'black';
+                table.style.backgroundColor = 'white';
 
                 const headers = ['Tanggal', 'Reseller', 'Jumlah', 'Status', 'Update', ''];
                 const headerRow = document.createElement('tr');
@@ -215,12 +222,14 @@ Status: ${row.status || ''}`;
                   th.style.whiteSpace = 'nowrap';
                   th.style.overflow = 'hidden';
                   th.style.textOverflow = 'ellipsis';
+                  th.style.color = 'black';
                   headerRow.appendChild(th);
                 });
                 table.appendChild(headerRow);
 
                 data.forEach(row => {
                   const tr = document.createElement('tr');
+                  tr.style.color = 'white';
 
                   const rowData = [
                     formatDate(row.waktu) || '',
@@ -271,6 +280,7 @@ Update: ${formatDate(row.tgl_status) || ''}`;
 
                 const closeButton = document.createElement('button');
                 closeButton.innerText = 'Close';
+                closeButton.className = 'button-29';
                 closeButton.style.marginTop = '10px';
                 closeButton.onclick = () => modal.remove();
                 modal.appendChild(closeButton);
