@@ -76,7 +76,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     row.sn || '',
                     row.status || '',
                     row.kode_reseller || '',
-                    row.harga || '',
+                    new Intl.NumberFormat('id-ID').format(row.harga) || '',
                     row.kode_modul_label || ''
                   ];
 
@@ -126,7 +126,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 Kode: ${row.kode_produk || ''}.
 Tujuan: ${row.tujuan || ''}.
 Ref: ${row.sn || ''}.
-Harga: ${row.harga || ''}.
+Harga: ${new Intl.NumberFormat('id-ID').format(row.harga) || ''}.
 Status: ${row.status || ''}`;
                     navigator.clipboard.writeText(formattedText)
                       .catch(error => console.error('Error copying text:', error));
@@ -229,12 +229,12 @@ Status: ${row.status || ''}`;
 
                 data.forEach(row => {
                   const tr = document.createElement('tr');
-                  tr.style.color = 'white';
+                  tr.style.color = 'black';
 
                   const rowData = [
                     formatDate(row.waktu) || '',
                     row.kode_reseller || '',
-                    row.jumlah || '',
+                    new Intl.NumberFormat('id-ID').format(row.jumlah) || '',
                     row.status || '',
                     formatDate(row.tgl_status) || ''
                   ];
@@ -260,7 +260,7 @@ Status: ${row.status || ''}`;
                   copyButton.onclick = () => {
                     const formattedText = `Tanggal: ${formatDate(row.waktu) || ''}.
 Reseller: ${row.kode_reseller || ''}.
-Jumlah: ${row.jumlah || ''}.
+Jumlah: ${new Intl.NumberFormat('id-ID').format(row.jumlah) || ''}.
 Status: ${row.status || ''}.
 Update: ${formatDate(row.tgl_status) || ''}`;
                     navigator.clipboard.writeText(formattedText)
